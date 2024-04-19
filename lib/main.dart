@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,12 +15,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(), // Use SplashScreen as the initial route
+      home: const SplashScreen(), // Use SplashScreen as the initial route
     );
   }
 }
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key); // Mark the constructor as const
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -45,9 +47,10 @@ class _SplashScreenState extends State<SplashScreen>
     );
     _animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        // When animation completes, navigate to the home page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyHomePage(title: 'JobNest')),
+          MaterialPageRoute(builder: (context) =>  HomeScreen()),
         );
       }
     });
@@ -57,12 +60,12 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2f6aad),
+      backgroundColor: const Color(0xFF2f6aad), 
       body: Center(
         child: ScaleTransition(
           scale: _animation,
           child: Text(
-            'JobNEST',
+            'JobNEST', // App name
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.bold,
@@ -78,43 +81,5 @@ class _SplashScreenState extends State<SplashScreen>
   void dispose() {
     _animationController.dispose();
     super.dispose();
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF2f6aad),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => CandidatePage()),
-                // );
-              },
-              child: Text('Get Started'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
