@@ -49,6 +49,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Post'),
+        backgroundColor: const Color(0xFF2f6aad),
       ),
       body: SingleChildScrollView(
         child: Padding(
