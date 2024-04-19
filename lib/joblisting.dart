@@ -132,7 +132,7 @@ class _JobListsState extends State<JobLists> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
+                      child: Image.asset(
                         jobs[index]["image"]!,
                         width: 100,
                         height: 100,
