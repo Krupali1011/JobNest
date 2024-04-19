@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'create_post_screen.dart';
+import 'CandidatePage.dart';
 import 'joblisting.dart';
 import 'post.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
   @override
-  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -54,34 +52,61 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-                'JobNest', style: TextStyle(fontSize: 20, color: Colors.white)),
-          ],
-        ),
-        backgroundColor: const Color(0xFF2f6aad), // Set app bar color directly
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.post_add, color: Colors.white),
-            onPressed: () {
-              // Navigate to post page
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreatePostScreen()),
-              );
-            },
-          ),
+        appBar: AppBar(
+        title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+        const Text('JobNest', style: TextStyle(fontSize: 20,color: Colors.white)),
+    ],
+    ),
+    backgroundColor: const Color(0xFF2f6aad), // Set app bar color directly
+    actions: [
+      IconButton(
+        icon: Icon(Icons.post_add, color: Colors.white),
+        onPressed: () async {
+          // Navigate to post page and wait for the result (new post)
+          final newPost = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreatePostScreen()),
+          );
 
-        ],
+          // Check if newPost is not null and add it to the posts list
+          if (newPost != null) {
+            setState(() {
+              posts.add(newPost);
+            });
+          }
+        },
       ),
+      IconButton(
+        icon: Icon(Icons.work , color: Colors.white),
+        onPressed: () {
+          // Navigate to job page
+          Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => JobLists()),
+                    );
+
+        },
+      ),
+    IconButton(
+    icon: Icon(Icons.person, color: Colors.white),
+    onPressed: () {
+    //Navigate to candidate page (this page)
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CandidateScreen()),
+          );
+
+    },
+    ),
+    ],
+    ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
@@ -94,9 +119,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              title: const Text('Create Post'),
+              title: Text('Home'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
+                // Navigate to Home Screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Create Post'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                // Navigate to Create Post Screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CreatePostScreen()),
@@ -104,128 +141,139 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              title: const Text('Job Lists'), // Add this ListTile for Job Lists
+              title: Text('Job Lists'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
+                // Navigate to Job Listing Page
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => JobLists()),
                 );
               },
             ),
+            ListTile(
+              title: Text('Candidate List'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                // Navigate to Candidate List Page
+                // Replace `CandidatePage()` with your actual candidate list page class
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CandidateScreen()),
+                );
+              },
+            ),
           ],
         ),
       ),
-      body: Container(
-        color: Colors.white, // Set the background color to white
-        child: SafeArea(
-          child: ListView.builder(
-            itemCount: posts.length,
-            itemBuilder: (context, index) {
-              final post = posts[index];
+    body: Container(
+    color: Colors.white, // Set the background color to white
+    child: SafeArea(
+    child: ListView.builder(
+    itemCount: posts.length,
+    itemBuilder: (context, index) {
+    final post = posts[index];
 
-              return Card(
-                color: Colors.white, // Set the card background color to white
-                margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 20.0,
-                            backgroundImage: NetworkImage(
-                              post.profilePictureUrl,
-                            ),
-                          ),
-                          const SizedBox(width: 10.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                post.candidateName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Text(
-                                '1h ago', // Example timestamp
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        post.content,
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      if (post.imageUrl != null) ...[
-                        const SizedBox(height: 10.0),
-                        Image.network(
-                          post.imageUrl!,
-                          fit: BoxFit.cover,
-                        ),
-                      ],
-                      const SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to Create Post Screen when the "Create a new post" section is clicked
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CreatePostScreen()),
-                              );
-                            },
-                            child: const Text(
-                              'Create a new post',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                post.isLiked = !post.isLiked;
-                              });
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: post.isLiked ? Colors.blue.withOpacity(
-                                    0.2) : Colors.transparent,
-                              ),
-                              padding: const EdgeInsets.all(10.0),
-                              child: Icon(
-                                Icons.thumb_up,
-                                color: post.isLiked ? Colors.blue : Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+    return Card(
+    color: Colors.white, // Set the card background color to white
+    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+    child: Padding(
+    padding: EdgeInsets.all(15.0),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Row(
+    children: [
+    CircleAvatar(
+    radius: 20.0,
+    backgroundImage: NetworkImage(
+    post.profilePictureUrl,
+    ),
+    ),
+    SizedBox(width: 10.0),
+    Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Text(
+    post.candidateName,
+    style: TextStyle(
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    Text(
+    '1h ago', // Example timestamp
+    style: TextStyle(
+    color: Colors.grey,
+    ),
+    ),
+    ],
+    ),
+    ],
+    ),
+    SizedBox(height: 10.0),
+    Text(
+    post.content,
+    style: TextStyle(
+    fontSize: 16.0,
+    ),
+    ),
+    if (post.imageUrl != null) ...[
+    SizedBox(height: 10.0),
+    Image.network(
+    post.imageUrl!,
+    fit: BoxFit.cover,
+    ),
+    ],
+    SizedBox(height: 10.0),
+    Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+    GestureDetector(
+    onTap: () {
+    // Navigate to Create Post Screen when the "Create a new post" section is clicked
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => CreatePostScreen()),
+    );
+    },
+    child: Text(
+    'Create a new post',
+    style: TextStyle(
+    color: Colors.blue,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    ),
+    GestureDetector(
+    onTap: () {
+    setState(() {
+    post.isLiked = !post.isLiked;
+    });
+    },
+    child: AnimatedContainer(
+    duration: Duration(milliseconds: 300),
+    curve: Curves.easeInOut,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: post.isLiked ? Colors.blue.withOpacity(0.2) : Colors.transparent,
+    ),
+      padding: EdgeInsets.all(10.0),
+      child: Icon(
+        Icons.thumb_up,
+        color: post.isLiked ? Colors.blue : Colors.grey,
       ),
+    ),
+    ),
+    ],
+    ),
+    ],
+    ),
+    ),
+    );
+    },
+    ),
+    ),
+    ),
     );
   }
 }
