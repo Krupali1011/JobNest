@@ -17,7 +17,8 @@ class JobDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Job Details'),
+        title: const Text('Job Details',style: TextStyle(fontSize: 20, color: Colors.white)),
+        backgroundColor: const Color(0xFF2f6aad),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
