@@ -111,6 +111,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     imageUrl: _imageUrlController.text,
                     profilePictureUrl: _profilePictureUrlController.text,
                   );
+                  // Clear form fields after submitting post
+                  _titleController.clear();
+                  _contentController.clear();
+                  _imageUrlController.clear();
+                  _profilePictureUrlController.clear();
                   // Pass the new post back to the HomeScreen
                   Navigator.pop(context, newPost);
                 },
@@ -126,13 +131,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     if (loadingProgress == null) {
                       return child;
                     } else {
-                      return CircularProgressIndicator(); // Show a loading indicator while the image is loading
+                      return CircularProgressIndicator();
                     }
                   },
                   errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) {
-                    return Text(
-                        'Error loading image'); 
+                    return Text('Error loading image');
                   },
                 ),
             ],
