@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Candidate.dart';
 import 'create_post_screen.dart';
-import 'CandidatePage.dart';
 import 'joblisting.dart';
 import 'post.dart';
 
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //Navigate to candidate page (this page)
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CandidateScreen()),
+          MaterialPageRoute(builder: (context) => Candidate()),
           );
 
     },
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Replace `CandidatePage()` with your actual candidate list page class
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CandidateScreen()),
+                  MaterialPageRoute(builder: (context) => Candidate()),
                 );
               },
             ),
